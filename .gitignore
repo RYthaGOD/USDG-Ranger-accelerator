@@ -5,3 +5,24 @@ target
 node_modules
 test-ledger
 .yarn
+
+# Secrets & Environment
+.env*
+**/*.json
+!package.json
+!tsconfig.json
+!Cargo.toml
+!Anchor.toml
+
+# Internal Docs & Submission
+submission_pack.md
+audit_report.md
+walkthrough.md
+task.md
+build.log
+verifiable_build.log
+verifiable_build.sh
+
+# Temporary / OS
+.DS_Store
+Thumbs.db
