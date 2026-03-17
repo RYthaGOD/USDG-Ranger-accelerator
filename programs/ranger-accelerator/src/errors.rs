@@ -16,4 +16,7 @@ pub enum RangerError {
 
     #[msg("Volume Cap Exceeded: Maximum Position Size reached")]
     VolumeCapExceeded,
+
+    #[msg("Math calculation error: potential overflow or division by zero")]
+    MathError,
 }

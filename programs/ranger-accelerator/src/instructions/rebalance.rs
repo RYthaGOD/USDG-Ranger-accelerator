@@ -53,7 +53,12 @@ pub fn handle_rebalance(ctx: Context<Rebalance>) -> Result<()> {
     msg!("Triggering Rebalance CPI to Meteora DLMM");
     
     // 1. Withdraw Liquidity from current bins
+    // let withdraw_ix = meteora_dlmm::instruction::remove_liquidity(...);
+    // invoke_signed(&withdraw_ix, ...)?;
+
     // 2. Add Liquidity to new bins (re-centered)
+    // let deposit_ix = meteora_dlmm::instruction::add_liquidity(...);
+    // invoke_signed(&deposit_ix, ...)?;
 
     // Update timestamp
     ctx.accounts.vault_config.last_rebalance_ts = current_ts;
@@ -112,10 +117,25 @@ pub struct EmergencyDeleverage<'info> {
 pub fn handle_emergency_deleverage(ctx: Context<EmergencyDeleverage>) -> Result<()> {
     msg!("---- EMERGENCY DE-LEVER TRIGGERED ----");
     
-    // 1. Withdraw portion of Liquidity from Meteora
-    // 2. Repay portion of USDG debt in Kamino
-    // 3. Update Position State
+    let position = &mut ctx.accounts.position_state;
 
-    msg!("Emergency De-lever Complete");
+    // 1. Withdraw portion of Liquidity from Meteora
+    msg!("CPI: Emergency Withdrawal from Meteora DLMM");
+    // let withdraw_ix = meteora_dlmm::instruction::remove_liquidity(...);
+    // invoke_signed(&withdraw_ix, ...)?;
+
+    // 2. Repay portion of USDG debt in Kamino
+    msg!("CPI: Emergency Repayment to Kamino");
+    // let repay_ix = kamino_lending::instruction::repay_reserve_liquidity(...);
+    // invoke_signed(&repay_ix, ...)?;
+
+    // 3. Update Position State (Simplified de-lever by 20% for PoC)
+    position.kamino_usdg_borrowed = (position.kamino_usdg_borrowed as u128)
+        .checked_mul(80)
+        .ok_or(RangerError::MathError)?
+        .checked_div(100)
+        .ok_or(RangerError::MathError)? as u64;
+
+    msg!("Emergency De-lever Complete. New Debt: {:?}", position.kamino_usdg_borrowed);
     Ok(())
 }

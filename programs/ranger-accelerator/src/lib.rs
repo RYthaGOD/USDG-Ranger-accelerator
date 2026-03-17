@@ -37,6 +37,10 @@ pub mod ranger_accelerator {
         instructions::governance::handle_update_config(ctx, new_manager, new_max_ltv, new_emergency_ltv, new_rebalance_throttle_hrs)
     }
 
+    pub fn init_kamino_obligation(ctx: Context<InitKaminoObligation>) -> Result<()> {
+        instructions::governance::handle_init_obligation(ctx)
+    }
+
     pub fn deposit(ctx: Context<Deposit>, amount: u64, min_shares_out: u64) -> Result<u64> {
         instructions::deposit::handle_deposit(ctx, amount, min_shares_out)
     }
@@ -47,5 +51,9 @@ pub mod ranger_accelerator {
 
     pub fn emergency_deleverage(ctx: Context<EmergencyDeleverage>) -> Result<()> {
         instructions::rebalance::handle_emergency_deleverage(ctx)
+    }
+
+    pub fn withdraw(ctx: Context<Withdraw>, shares: u64, min_usdc_out: u64) -> Result<()> {
+        instructions::withdrawal::handle_withdraw(ctx, shares, min_usdc_out)
     }
 }

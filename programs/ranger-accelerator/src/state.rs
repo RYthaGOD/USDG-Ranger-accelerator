@@ -34,12 +34,15 @@ pub struct VaultConfig {
     
     /// Timestamp of last rebalance
     pub last_rebalance_ts: i64,
+
+    /// Timestamp of last config update (for timelock)
+    pub last_config_update_ts: i64,
     
     /// Max allowable total JitoSOL position size (Volume Cap)
     pub max_deposit_cap: u64,
     
     /// Reserved space for future upgrades
-    pub padding: [u64; 10],
+    pub padding: [u64; 9],
 }
 
 impl VaultConfig {
